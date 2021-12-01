@@ -3,6 +3,7 @@ package DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,17 +35,22 @@ public class HoaDonThueDAO {
 		return null;
 	}
 	
-	public void insert(HoaDonThue hoaDon) {
+	public int insert(HoaDonThue hoaDon) {
 		String sql = "Insert into HoaDonThue(NgayThue,MaKH) values(?,?)";
 		try {
 			conn = new DBConnect().getConnection();
-			ps = conn.prepareStatement(sql);
+			ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setDate(1,  new java.sql.Date(hoaDon.getNgayThue().getTime()) );
 			ps.setInt(2, hoaDon.getKhachHang().getMaKH());
 			ps.executeUpdate();
+			ResultSet generatedKeys = ps.getGeneratedKeys();
+			while(generatedKeys.next()) {
+				return generatedKeys.getInt(1);
+			}
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+		return -1;
 	}
 	
 	public void update(HoaDonThue hoaDon) {
@@ -94,11 +100,10 @@ public class HoaDonThueDAO {
 	}
 	
 	public static void main(String[] args) {
-		/*HoaDonThueDAO dao = new HoaDonThueDAO();
+		HoaDonThueDAO dao = new HoaDonThueDAO();
 		HoaDonThue hd = new HoaDonThue(new Date(), new KhachHangDAO().get(1));
-		dao.insert(hd);*/
+		System.out.println(dao.insert(hd));
 		
-		System.out.println(new KhachHangDAO().get(1).getDsThue());
-		
+	
 	}
 }

@@ -3,6 +3,8 @@ package DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import Connection.DBConnect;
 import Model.KhachHang;
@@ -67,6 +69,23 @@ public class KhachHangDAO {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public List<KhachHang> searchByName(String kw) {
+		String sql = "Select * from KhachHang where TenKH LIKE ?";
+		List<KhachHang> list = new ArrayList<KhachHang>();
+		try {
+			conn = new DBConnect().getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, "%" + kw + "%");
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				list.add(new KhachHang(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 	
 	public static void main(String[] args) {
