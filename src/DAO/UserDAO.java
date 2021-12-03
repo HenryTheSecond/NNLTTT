@@ -86,6 +86,40 @@ public class UserDAO {
 		}
 	}
 	
+	
+	public int kiemTraDangNhap(int isAdmin, String username, String password ) {
+		String sql = "Select * from users where isAdmin = ? and Username = ? and Password = ?;";
+		User user = new User();
+		user.setIsAdmin(2);
+		try {
+			conn = new DBConnect().getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, isAdmin);
+			ps.setString(2, username);
+			ps.setString(3, password);
+			rs = ps.executeQuery();
+			//Lấy về đối tượng để mốt có muốn trả về đối tượng thì chỉ cần thay kiểu giá trị trả về
+			while(rs.next()) {
+				user.setId(rs.getInt(1));
+				user.setUsername(rs.getString(2));
+				user.setPassword(rs.getString(3));
+				user.setTenNV(rs.getString(4));
+				user.setSDT(rs.getString(5));
+				user.setNgaySinh(rs.getDate(6));
+				user.setGioiTinh(rs.getString(7));
+				user.setIsAdmin(rs.getInt(8));
+				if(user.getIsAdmin() == 1)
+					return 1;
+				else if(user.getIsAdmin() == 0)
+					return 0;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 2;
+	}
+	
+	
 	public static void main(String[] args) {
 		UserDAO dao = new UserDAO();
 		/*User u = new User("tuyen", "123", "vct", "123", new Date(), "nam", 1);

@@ -1,6 +1,7 @@
 eclipse.preferences.version=1
 encoding//src/DAO/KhachHangDAO.java=UTF-8
 encoding//src/DAO/TheLoaiDAO.java=UTF-8
+encoding//src/DAO/UserDAO.java=UTF-8
 encoding//src/GUI/MuaDiaForm.java=UTF-8
 encoding//src/GUI/ThueDiaForm.java=UTF-8
 encoding//src/GUI/TraDiaForm.java=UTF-8
