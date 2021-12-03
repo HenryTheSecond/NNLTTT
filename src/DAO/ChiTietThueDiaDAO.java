@@ -60,6 +60,28 @@ public class ChiTietThueDiaDAO {
 		return list;
 	}
 	
+	
+	public List<ChiTietThueDia> getDiaChuTraByMaKH(int maKH){
+		String sql = "select * from ChiTietThueDia where NgayTra is null and MaHoaDon in (select MaHoaDon from HoaDonThue where MaKH=?)";
+		List<ChiTietThueDia> list = new ArrayList<ChiTietThueDia>();
+
+		try {
+			conn = new DBConnect().getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, maKH);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				list.add( new ChiTietThueDia(rs.getInt(1), hoaDonDAO.get(rs.getInt(2)), bangDiaDAO.get(rs.getInt(3)), rs.getInt(4), rs.getFloat(5), rs.getDate(6), rs.getFloat(7)) );
+
+			}
+			return list;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
 	public ChiTietThueDia get(int id) {
 		String sql = "select * from ChiTietThueDia where id=?";
 		try {
@@ -125,6 +147,7 @@ public class ChiTietThueDiaDAO {
 	}
 	
 	
+	
 	public static void main(String[] args) {
 		ChiTietThueDiaDAO dao = new ChiTietThueDiaDAO();
 		/*ChiTietThueDia ct = new ChiTietThueDia(new HoaDonThueDAO().get(2), new BangDiaDAO().get(2), 10, 10, null, 0);
@@ -134,7 +157,8 @@ public class ChiTietThueDiaDAO {
 		/*ct.setNgayTra(new Date());
 		dao.update(ct);*/
 		
-		System.out.println( new HoaDonThueDAO().get(2).getDsChiTietThue()  );
+		//System.out.println( new HoaDonThueDAO().get(2).getDsChiTietThue()  );
+		System.out.println(dao.getDiaChuTraByMaKH(1));
 	}
 	
 }
