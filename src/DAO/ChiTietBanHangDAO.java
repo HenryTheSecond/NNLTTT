@@ -8,6 +8,7 @@ import java.util.List;
 
 import Connection.DBConnect;
 import Model.ChiTietBanHang;
+import Model.ChiTietThueDia;
 
 public class ChiTietBanHangDAO {
 	Connection conn= null;
@@ -16,6 +17,24 @@ public class ChiTietBanHangDAO {
 	
 	HoaDonBanHangDAO hoaDonDAO = new HoaDonBanHangDAO();
 	BangDiaDAO bangDiaDAO = new BangDiaDAO();
+	
+	public List<ChiTietBanHang> getAllChiTietBanHang(){
+		String sql = "Select * From ChiTietBanHang";
+		List<ChiTietBanHang> list = new ArrayList<ChiTietBanHang>();
+		BangDiaDAO bangDiaDAO = new BangDiaDAO();
+		try {
+			conn = new DBConnect().getConnection();
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				list.add( new  ChiTietBanHang(rs.getInt(1), hoaDonDAO.get(rs.getInt(2)), bangDiaDAO.get(rs.getInt(3)), rs.getInt(4), rs.getFloat(5)));
+			}
+			return list;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 	
 	public List<ChiTietBanHang> getChiTietBanHangByMaDia(int maDia){
 		String sql = "Select * from ChiTietBanHang where MaDia=?";

@@ -21,6 +21,25 @@ public class ChiTietThueDiaDAO {
 	HoaDonThueDAO hoaDonDAO = new HoaDonThueDAO();
 	BangDiaDAO bangDiaDAO = new BangDiaDAO();
 	
+	public List<ChiTietThueDia> getAllChiTietThueDia(){
+		String sql = "Select * From ChiTietThueDia";
+		List<ChiTietThueDia> list = new ArrayList<ChiTietThueDia>();
+		BangDiaDAO bangDiaDAO = new BangDiaDAO();
+		try {
+			conn = new DBConnect().getConnection();
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				list.add( new ChiTietThueDia(rs.getInt(1), hoaDonDAO.get(rs.getInt(2)), bangDiaDAO.get(rs.getInt(3)), rs.getInt(4), rs.getFloat(5), rs.getDate(6), rs.getFloat(7)) );
+			}
+			return list;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
 	public List<ChiTietThueDia> getChiTietThueDiaByMaDia(int maDia){
 		String sql = "Select * From ChiTietThueDia where DiaID=?";
 		List<ChiTietThueDia> list = new ArrayList<ChiTietThueDia>();
