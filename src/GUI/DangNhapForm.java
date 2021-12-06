@@ -52,7 +52,7 @@ public class DangNhapForm extends JFrame {
 	 * Create the frame.
 	 */
 	public DangNhapForm() {
-		setTitle("Đăng Nhập Tài Khoản");
+setTitle("Đăng Nhập Tài Khoản");
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);

@@ -52,6 +52,11 @@ public class TheLoai {
 	public TheLoai(String tenTL) {
 		this.tenTL = tenTL;
 	}
+
+	@Override
+	public String toString() {
+		return tenTL;
+	}
 	
 	
 	

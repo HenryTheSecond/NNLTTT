@@ -172,6 +172,9 @@ public class TraDiaForm extends JFrame {
 						chiTietDAO.update(ct);
 						new BangDiaDAO().update(dia);
 						JOptionPane.showMessageDialog(null, "Thanh toán thành công");
+						
+						//Chỉnh sửa hiển thị
+						tableDsDia.setValueAt(new Date(), row, 5);
 					}					
 				}
 			}

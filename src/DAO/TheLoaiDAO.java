@@ -3,6 +3,8 @@ package DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import Connection.DBConnect;
 import Model.TheLoai;
@@ -63,6 +65,22 @@ public class TheLoaiDAO {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public List<TheLoai> getAll(){
+		String sql = "Select * from TheLoai";
+		List<TheLoai> list = new ArrayList<TheLoai>();
+		try {
+			conn = new DBConnect().getConnection();
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				list.add(new TheLoai(rs.getInt(1), rs.getString(2)));
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 	
 	public static void main(String[] args) {

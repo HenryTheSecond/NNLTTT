@@ -120,6 +120,25 @@ public class BangDiaDAO {
 		return list;
 	}
 	
+	
+	public List<BangDia> getAll(){
+		String sql = "select * from BangDia";
+		List<BangDia> list = new ArrayList<BangDia>();
+		try {
+			conn = new DBConnect().getConnection();
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				BangDia dia = new BangDia(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getFloat(6), rs.getFloat(7), new TheLoaiDAO().get(rs.getInt(8)));
+				list.add(dia);
+			}
+			return list;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 	public static void main(String[] args) {
 		BangDiaDAO dao = new BangDiaDAO();
 		/*BangDia dia = new BangDia("Departure", 10, 5, 0, 15, 3, new TheLoaiDAO().get(2));
