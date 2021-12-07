@@ -17,6 +17,7 @@ import Model.TheLoai;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import java.awt.event.ItemListener;
@@ -24,6 +25,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.ItemEvent;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class QuanLyBangDiaForm extends JFrame {
 
@@ -37,6 +40,7 @@ public class QuanLyBangDiaForm extends JFrame {
 	private JTextField txtGiaBan;
 	private JTextField txtGiaThue;
 	private JComboBox comboBoxTheLoai;
+	private JTextField txtSearch;
 	
 	/**
 	 * Launch the application.
@@ -59,7 +63,7 @@ public class QuanLyBangDiaForm extends JFrame {
 	 */
 	public QuanLyBangDiaForm() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1111, 335);
+		setBounds(100, 100, 1111, 381);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -151,16 +155,45 @@ public class QuanLyBangDiaForm extends JFrame {
 		contentPane.add(txtGiaThue);
 		
 		JButton btnAdd = new JButton("Add");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnAddClicked();
+			}
+		});
 		btnAdd.setBounds(20, 249, 69, 23);
 		contentPane.add(btnAdd);
 		
 		JButton btnUpdate = new JButton("Update");
-		btnUpdate.setBounds(99, 249, 69, 23);
+		btnUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnUpdateClicked();
+			}
+		});
+		btnUpdate.setBounds(99, 249, 84, 23);
 		contentPane.add(btnUpdate);
 		
 		JButton btnDelete = new JButton("Delete");
-		btnDelete.setBounds(178, 249, 87, 23);
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnDeleteClicked();
+			}
+		});
+		btnDelete.setBounds(193, 249, 87, 23);
 		contentPane.add(btnDelete);
+		
+		JButton btnSearch = new JButton("Search");
+		btnSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				btnSearchClicked();
+			}
+		});
+		btnSearch.setBounds(996, 282, 89, 23);
+		contentPane.add(btnSearch);
+		
+		txtSearch = new JTextField();
+		txtSearch.setBounds(644, 283, 342, 20);
+		contentPane.add(txtSearch);
+		txtSearch.setColumns(10);
 		
 		
 		//Add Listener
@@ -200,6 +233,7 @@ public class QuanLyBangDiaForm extends JFrame {
 	
 	public void fillTableBangDia(List<BangDia> list) {
 		DefaultTableModel mod = (DefaultTableModel)tableBangDia.getModel();
+		mod.setRowCount(0);
 		for(BangDia dia:list) {
 			Object item[] = {dia.getMaDia(), dia.getTenLoaiDia(), dia.getSoLuong(), dia.getSoLuongThue(), dia.getDangThue(), dia.getGiaBan(), dia.getGiaThue(),
 								dia.getTheLoai().getMaTL(), dia.getTheLoai().getTenTL()};
@@ -239,7 +273,94 @@ public class QuanLyBangDiaForm extends JFrame {
 	}
 	
 	
+	public void btnAddClicked() {
+		if(kiemTraInput()) {
+			BangDia dia = new BangDia();
+			dia.setTenLoaiDia( txtTenDia.getText() );
+			dia.setSoLuong( Integer.parseInt(txtSoLuong.getText()) );
+			dia.setSoLuongThue( Integer.parseInt(txtSoLuongThue.getText()) );
+			dia.setDangThue( Integer.parseInt( txtDangThue.getText() ) );
+			dia.setGiaBan( Float.parseFloat(txtGiaBan.getText()) );
+			dia.setGiaThue( Float.parseFloat(txtGiaThue.getText()) );
+			dia.setTheLoai( (TheLoai)comboBoxTheLoai.getSelectedItem() );
+			
+			new BangDiaDAO().insert(dia);
+			JOptionPane.showMessageDialog(null, "Thêm thành công");
+			InitTableBangDia();
+		}
+		else
+			JOptionPane.showMessageDialog(null, "Vui lòng kiểm tra lại dữ liệu nhập");
+	}
+	
+	public boolean kiemTraInput() {
+		try {
+			Integer.parseInt(txtSoLuong.getText());
+			Integer.parseInt(txtSoLuongThue.getText());
+			Integer.parseInt( txtDangThue.getText() );
+			Float.parseFloat(txtGiaBan.getText());
+			Float.parseFloat(txtGiaThue.getText());
+		}catch(Exception e) {
+			return false;
+		}
+		if(txtTenDia.getText().equals(""))
+			return false;
+		return true;
+	}
+	
+	public void btnUpdateClicked() {
+		if(kiemTraInput()) {
+			BangDia dia = new BangDia();
+			try {
+				dia.setMaDia( Integer.parseInt( txtMaDia.getText() ) );
+				dia.setTenLoaiDia( txtTenDia.getText() );
+				dia.setSoLuong( Integer.parseInt(txtSoLuong.getText()) );
+				dia.setSoLuongThue( Integer.parseInt(txtSoLuongThue.getText()) );
+				dia.setDangThue( Integer.parseInt( txtDangThue.getText() ) );
+				dia.setGiaBan( Float.parseFloat(txtGiaBan.getText()) );
+				dia.setGiaThue( Float.parseFloat(txtGiaThue.getText()) );
+				dia.setTheLoai( (TheLoai)comboBoxTheLoai.getSelectedItem() );
+				new BangDiaDAO().update(dia);
+				JOptionPane.showMessageDialog(null, "Cập nhật thành công");
+				InitTableBangDia();
+			}catch(Exception e) {
+				JOptionPane.showMessageDialog(null, "Vui lòng kiểm tra lại dữ liệu nhập");
+			}
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "Vui lòng kiểm tra lại dữ liệu nhập");
+		}
+	}
+	
+	public void btnDeleteClicked() {
+		try {
+			int maDia = Integer.parseInt( txtMaDia.getText() );
+			if( JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn xóa đĩa") == JOptionPane.YES_OPTION ) {
+				new BangDiaDAO().delete(maDia);
+				JOptionPane.showMessageDialog(null, "Xóa thành công");
+				InitTableBangDia();
+			}
+		}catch(Exception e) {
+			JOptionPane.showMessageDialog(null, "Vui lòng kiểm tra lại Mã Đĩa");
+		}
+	}
+	
+	public void btnSearchClicked() {
+		List<BangDia> list = new BangDiaDAO().searchByName( txtSearch.getText().trim() );
+		fillTableBangDia(list);
+	}
+	
 	public void comboBoxTheLoaiSelectChanged() {
 
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
