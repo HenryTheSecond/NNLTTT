@@ -1,13 +1,13 @@
 package Model;
 
 public class TienPhat {
-	private int soTIen;
+	private float soTIen;
 
-	public int getSoTIen() {
+	public float getSoTIen() {
 		return soTIen;
 	}
 
-	public void setSoTIen(int soTIen) {
+	public void setSoTIen(float soTIen) {
 		this.soTIen = soTIen;
 	}
 
