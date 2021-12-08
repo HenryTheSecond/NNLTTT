@@ -3,15 +3,38 @@ package DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import Connection.DBConnect;
+import Model.TheLoai;
 import Model.User;
 
 public class UserDAO {
 	Connection conn= null;
 	PreparedStatement ps = null;
 	ResultSet rs = null;
+	
+	public List<User> getUser() {
+		String sql = "select * from users where isAdmin=0";
+		List<User> list = new ArrayList<User>();
+		try {
+			conn = new DBConnect().getConnection();
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				list.add(new User(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getDate(6),rs.getString(7),rs.getInt(8)));
+			}
+			return list;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
 	
 	public User get(int id) {
 		String sql = "select * from users where id=?";
@@ -40,7 +63,7 @@ public class UserDAO {
 	}
 	
 	public void update(User user) {
-		String sql = "Update users set tennv=?, sdt=?, NgaySinh=?, GioiTinh=?, isAdmin=? where id=?";
+		String sql = "Update users set tennv=?, sdt=?, NgaySinh=?, GioiTinh=? where id=?";
 		try {
 			conn = new DBConnect().getConnection();
 			ps = conn.prepareStatement(sql);
@@ -48,8 +71,7 @@ public class UserDAO {
 			ps.setString(2, user.getSDT());
 			ps.setDate(3, new java.sql.Date(user.getNgaySinh().getTime()) );
 			ps.setString(4, user.getGioiTinh());
-			ps.setInt(5, user.getIsAdmin());
-			ps.setInt(6, user.getId());
+			ps.setInt(5, user.getId());
 			ps.executeUpdate();
 		}catch(Exception e) {
 			e.printStackTrace();
