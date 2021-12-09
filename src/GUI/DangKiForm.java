@@ -135,6 +135,7 @@ public class DangKiForm extends JFrame {
 		textFieldNgaySinh.setText("YYYY-MM-DD");
 		
 		rdbtnNam = new JRadioButton("Nam");
+		rdbtnNam.setSelected(true);
 		rdbtnNam.setFont(new Font("Bahnschrift", Font.PLAIN, 20));
 		rdbtnNam.setBounds(202, 312, 112, 25);
 		contentPane.add(rdbtnNam);
@@ -149,6 +150,7 @@ public class DangKiForm extends JFrame {
 		btnGroupGioiTinh.add(rdbtnNu);
 		
 		rdbtnAdmin = new JRadioButton("Admin");
+		rdbtnAdmin.setSelected(true);
 		rdbtnAdmin.setFont(new Font("Bahnschrift", Font.PLAIN, 20));
 		rdbtnAdmin.setBounds(202, 349, 112, 25);
 		contentPane.add(rdbtnAdmin);
@@ -207,14 +209,15 @@ public class DangKiForm extends JFrame {
 		if(rdbtnAdmin.isSelected() == false)
 			isAdmin = 0;
 		if(flag == 0) {
-			User user = new User(id,username,password,tenNV,sdt, ngaySinh,gioiTinh,isAdmin);
-			userDAO.insert(user);
-			if(userDAO.getByUsername(username) == null)
+			if(userDAO.getByUsername(username) != null)
 				JOptionPane.showMessageDialog(contentPane, "Đăng ký thất bại, Vui lòng nhập username khác" , "Error", 
 	                    JOptionPane.ERROR_MESSAGE);
-			else
+			else {
+				User user = new User(id,username,password,tenNV,sdt, ngaySinh,gioiTinh,isAdmin);
+				userDAO.insert(user);
 				JOptionPane.showMessageDialog(contentPane, "Đăng ký thành công", "Successfully", 
 	                    JOptionPane.ERROR_MESSAGE);
+			}
 		}else
 			JOptionPane.showMessageDialog(contentPane, "Đăng ký thất bại", "Error", 
                     JOptionPane.ERROR_MESSAGE);
