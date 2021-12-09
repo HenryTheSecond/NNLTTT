@@ -76,18 +76,13 @@ setTitle("Đăng Nhập Tài Khoản");
         bg.add(rdbtnNhanVien);
         bg.add(rdbtnQuanLi);
 		
-        
-		JButton btnDangKi = new JButton("Đăng Kí");
-		btnDangKi.setBounds(44, 199, 110, 41);
-		contentPane.add(btnDangKi);
-		
 		JButton btnDangNhap = new JButton("Đăng Nhập");
 		btnDangNhap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnDangNhapClicked();
 			}
 		});
-		btnDangNhap.setBounds(185, 199, 110, 41);
+		btnDangNhap.setBounds(44, 199, 110, 41);
 		contentPane.add(btnDangNhap);
 		
 		JButton btnCancel = new JButton("Hủy");
