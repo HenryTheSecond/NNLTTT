@@ -33,6 +33,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -65,7 +67,7 @@ public class MuaDiaForm extends JFrame {
 	 * Create the frame.
 	 */
 	public MuaDiaForm() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 965, 599);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -117,6 +119,7 @@ public class MuaDiaForm extends JFrame {
 		mod.addColumn("Số lượng");
 		mod.addColumn("Giá");
 		mod.addColumn("Tổng giá");
+		mod.addColumn("");
 		table_chitietmua.setModel(mod);
 		table_chitietmua.getModel().addTableModelListener(new TableModelListener() {
 			@Override
@@ -147,6 +150,31 @@ public class MuaDiaForm extends JFrame {
 		lblThngTinMua = new JLabel("Thông tin mua");
 		lblThngTinMua.setBounds(514, 62, 148, 42);
 		contentPane.add(lblThngTinMua);
+		
+		
+		//XÓA CHI TIẾT
+		table_chitietmua.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int col = table_chitietmua.getSelectedColumn();
+				if(col == 5) {
+					XoaChiTiet();
+				}
+			}
+		});
 	}
 	
 	
@@ -182,7 +210,7 @@ public class MuaDiaForm extends JFrame {
 			int row = table_Dia.getSelectedRow();
 			if(kiemTraTrungChiTiet(table_Dia.getValueAt(row, 0).toString())) {
 				
-				Object[] item = {table_Dia.getValueAt(row, 0), table_Dia.getValueAt(row, 1),"", table_Dia.getValueAt(row, 3),""};
+				Object[] item = {table_Dia.getValueAt(row, 0), table_Dia.getValueAt(row, 1),"", table_Dia.getValueAt(row, 3),"", "XÓA"};
 				DefaultTableModel mod = (DefaultTableModel)table_chitietmua.getModel();
 				mod.addRow(item);
 			}
@@ -197,6 +225,11 @@ public class MuaDiaForm extends JFrame {
 		mod.removeRow(table_chitietmua.getSelectedRow());
 	}
 	
+	public void XoaChiTiet() {
+		DefaultTableModel mod = (DefaultTableModel)table_chitietmua.getModel();
+		int row = table_chitietmua.getSelectedRow();
+		mod.removeRow(row);
+	}
 	
 	public void XacNhan() {
 		if(kiemTraDuLieu() == false) {
@@ -220,6 +253,7 @@ public class MuaDiaForm extends JFrame {
 			dia.setSoLuong(dia.getSoLuong()-Integer.parseInt(table_chitietmua.getValueAt(i, 2).toString()));
 			bangDiaDAO.update(dia);
 		}
+		JOptionPane.showMessageDialog(null, "Thêm thành công");
 	}
 	
 	public boolean kiemTraDuLieu() {

@@ -62,7 +62,7 @@ public class QuanLyBangDiaForm extends JFrame {
 	 * Create the frame.
 	 */
 	public QuanLyBangDiaForm() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1111, 381);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

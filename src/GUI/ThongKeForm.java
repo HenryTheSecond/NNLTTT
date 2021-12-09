@@ -29,6 +29,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
 
 public class ThongKeForm extends JFrame {
@@ -63,7 +65,7 @@ public class ThongKeForm extends JFrame {
 	 * Create the frame.
 	 */
 	public ThongKeForm() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1300, 592);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -153,6 +155,35 @@ public class ThongKeForm extends JFrame {
 		 txtKhachHang.setColumns(10);
 		
 		loadDoanhThu();
+		
+		tableThongKe.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int col = tableThongKe.getSelectedColumn();
+				if(col == 2 || col ==3) {
+					HoaDonBanDia();
+				}
+				else if(col == 4 || col == 5) {
+					HoaDonThueDia();
+				}
+				else if(col == 6 && !tableThongKe.getValueAt( tableThongKe.getSelectedRow() , col).toString().equals("0")) {
+					DiaChuaTra();
+				}
+			}
+		});
 	}
 	
 	public void InitTableThongKe() {
@@ -214,6 +245,27 @@ public class ThongKeForm extends JFrame {
 		String kw = txtKhachHang.getText();
 		List<KhachHang> list = new KhachHangDAO().searchByName(kw);
 		fillTableKhachHang(list);
+	}
+	
+	public void HoaDonBanDia() {
+		int row = tableThongKe.getSelectedRow();
+		BangDia dia = new BangDiaDAO().get( Integer.parseInt( tableThongKe.getValueAt(row, 0).toString() ) );
+		HoaDonBanForm hdBanForm = new HoaDonBanForm(dia);
+		hdBanForm.setVisible(true);
+	}
+	
+	public void HoaDonThueDia() {
+		int row = tableThongKe.getSelectedRow();
+		BangDia dia = new BangDiaDAO().get( Integer.parseInt( tableThongKe.getValueAt(row, 0).toString() ) );
+		HoaDonThueForm hdThueForm = new HoaDonThueForm(dia);
+		hdThueForm.setVisible(true);
+	}
+	
+	public void DiaChuaTra() {
+		int row = tableThongKe.getSelectedRow();
+		BangDia dia = new BangDiaDAO().get( Integer.parseInt( tableThongKe.getValueAt(row, 0).toString() ) );
+		ChuaTraDiaForm chuaTraDiaForm = new ChuaTraDiaForm(dia);
+		chuaTraDiaForm.setVisible(true);
 	}
 	
 	public void loadDoanhThu() {
