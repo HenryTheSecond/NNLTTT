@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JRadioButton;
 
 public class QuanLiNhanVienForm extends JFrame {
 
@@ -36,7 +37,8 @@ public class QuanLiNhanVienForm extends JFrame {
 	private JTextField textField_NV;
 	private JTextField textField_sdt;
 	private JTextField textField_ngaysinh;
-	private JTextField textField_gt;
+	private JRadioButton rdbtnNam;
+	private JRadioButton rdbtnNu;
 
 	/**
 	 * Launch the application.
@@ -107,7 +109,7 @@ public class QuanLiNhanVienForm extends JFrame {
 		contentPane.add(lblNgaysinh);
 		
 		JLabel lblGt = new JLabel("Giới tính");
-		lblGt.setBounds(314, 61, 112, 35);
+		lblGt.setBounds(360, 61, 112, 35);
 		contentPane.add(lblGt);
 		
 		textField_sdt = new JTextField();
@@ -120,11 +122,6 @@ public class QuanLiNhanVienForm extends JFrame {
 		textField_ngaysinh.setBounds(388, 19, 152, 22);
 		contentPane.add(textField_ngaysinh);
 		
-		textField_gt = new JTextField();
-		textField_gt.setColumns(10);
-		textField_gt.setBounds(388, 67, 152, 22);
-		contentPane.add(textField_gt);
-		
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -133,7 +130,8 @@ public class QuanLiNhanVienForm extends JFrame {
 				textField_NV.setText("");
 				textField_sdt.setText("");
 				textField_ngaysinh.setText("");
-				textField_gt.setText("");
+				rdbtnNam.setSelected(false);
+				rdbtnNu.setSelected(false);
 			}
 		});
 		btnUpdate.setBounds(669, 18, 102, 45);
@@ -147,6 +145,26 @@ public class QuanLiNhanVienForm extends JFrame {
 		});
 		btnDelete.setBounds(669, 92, 102, 45);
 		contentPane.add(btnDelete);
+		
+		rdbtnNam = new JRadioButton("Nam");
+		rdbtnNam.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				rdbtnNu.setSelected(false);
+			}
+		});
+		rdbtnNam.setBounds(299, 114, 127, 25);
+		contentPane.add(rdbtnNam);
+		
+		rdbtnNu = new JRadioButton("Nu");
+		rdbtnNu.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				rdbtnNam.setSelected(false);
+			}
+		});
+		rdbtnNu.setBounds(451, 114, 127, 25);
+		contentPane.add(rdbtnNu);
 	}
 	
 	
@@ -183,7 +201,14 @@ public class QuanLiNhanVienForm extends JFrame {
 		textField_NV.setText(table_NhanVien.getValueAt(row, 3).toString());
 		textField_sdt.setText(table_NhanVien.getValueAt(row, 4).toString());
 		textField_ngaysinh.setText(table_NhanVien.getValueAt(row, 5).toString());
-		textField_gt.setText(table_NhanVien.getValueAt(row, 6).toString());
+		String gt = table_NhanVien.getValueAt(row, 6).toString();
+		if(gt.equals("Nam")) {
+			rdbtnNam.setSelected(true);
+			rdbtnNu.setSelected(false);
+		}else {
+			rdbtnNu.setSelected(true);
+			rdbtnNam.setSelected(false);
+		}
 	}
 	
 	public void btnUpdateClicked() {
@@ -194,7 +219,11 @@ public class QuanLiNhanVienForm extends JFrame {
 			user.setTenNV(textField_NV.getText());
 			user.setSDT(textField_sdt.getText());
 			user.setNgaySinh(new SimpleDateFormat("yyyy-MM-dd").parse(textField_ngaysinh.getText()));
-			user.setGioiTinh(textField_gt.getText());
+			String gt="Nam";
+			if(rdbtnNu.isSelected()==true) {
+				gt="Nu";
+			}
+			user.setGioiTinh(gt);
 			new UserDAO().update(user);
 			JOptionPane.showMessageDialog(null, "Cập nhật thành công");
 			InitTableTheLoai();
