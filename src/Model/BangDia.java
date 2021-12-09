@@ -132,4 +132,42 @@ public class BangDia {
 	}
 	
 	
+	//THỐNG KẾ
+	public int getDoanhSoBan() {
+		int soLuong=0;
+		for(ChiTietBanHang ct: this.getDsChiTietBanHang()) {
+			soLuong += ct.getSoLuong();
+		}
+		return soLuong;
+	}
+	
+	public int getDoanhSoThue() {
+		return this.getDsChiTietThue().size();
+	}
+	
+	public float getDoanhThuBan() {
+		float doanhThu=0;
+		for(ChiTietBanHang ct: this.getDsChiTietBanHang()) {
+			doanhThu += ct.getSoLuong() * ct.getGia();
+		}
+		return doanhThu;
+	}
+	
+	public float getDoanhThuThue() {
+		float doanhThu=0;
+		for(ChiTietThueDia ct: this.getDsChiTietThue()) {
+			doanhThu += ct.getThanhToan();
+		}
+		return doanhThu;
+	}
+	
+	public int getSoLuongDiaChuaTra() {
+		int soLuong = 0 ;
+		for(ChiTietThueDia ct: this.getDsChiTietThue()) {
+			if(ct.getNgayTra() == null)
+				soLuong++;
+		}
+		return soLuong;
+	}
+	
 }

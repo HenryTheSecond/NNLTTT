@@ -39,6 +39,32 @@ public class UserDAO {
 		return null;
 	}
 	
+	public User getByUsername(String username) {
+		String sql = "select * from users where Username=?";
+		try {
+			conn = new DBConnect().getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, username);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				User user = new User();
+				user.setId(rs.getInt(1));
+				user.setUsername(rs.getString(2));
+				user.setPassword(rs.getString(3));
+				user.setTenNV(rs.getString(4));
+				user.setSDT(rs.getString(5));
+				user.setNgaySinh(rs.getDate(6));
+				user.setGioiTinh(rs.getString(7));
+				user.setIsAdmin(rs.getInt(8));
+				
+				return user;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public void update(User user) {
 		String sql = "Update users set tennv=?, sdt=?, NgaySinh=?, GioiTinh=?, isAdmin=? where id=?";
 		try {

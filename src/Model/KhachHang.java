@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import DAO.HoaDonThueDAO;
+import DAO.KhachHangDAO;
 
 public class KhachHang {
 	private int maKH;
@@ -69,5 +70,32 @@ public class KhachHang {
 		this.soDT = soDT;
 	}
 	
+	public List<Object> getThongKe() {
+		List<Object> item = new ArrayList<Object>();
+		int soLuongThue=0;
+		int soLuongChuaTra=0;
+		float soLuongTien = 0;
+		for(HoaDonThue hd: this.getDsThue()) {
+			for(ChiTietThueDia ct: hd.getDsChiTietThue()) {
+				if(ct.getNgayTra() == null) {
+					soLuongChuaTra++;
+				}
+				soLuongThue++;
+				soLuongTien += ct.getThanhToan();
+			}
+		}
+		item.add(soLuongThue); 
+		item.add(soLuongChuaTra); 
+		item.add(soLuongTien);
+		return item;
+	}
+	
+	public static void main(String[] args) {
+		KhachHang kh = new KhachHangDAO().get(3);
+		for(HoaDonThue hd: kh.getDsThue()) {
+			for(ChiTietThueDia ct: hd.getDsChiTietThue())
+				System.out.println(ct.getNgayTra()==null);
+		}
+	}
 	
 }

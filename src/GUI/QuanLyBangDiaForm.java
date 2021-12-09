@@ -236,7 +236,7 @@ public class QuanLyBangDiaForm extends JFrame {
 		mod.setRowCount(0);
 		for(BangDia dia:list) {
 			Object item[] = {dia.getMaDia(), dia.getTenLoaiDia(), dia.getSoLuong(), dia.getSoLuongThue(), dia.getDangThue(), dia.getGiaBan(), dia.getGiaThue(),
-								dia.getTheLoai().getMaTL(), dia.getTheLoai().getTenTL()};
+								dia.getTheLoai().getMaTL(), dia.getTheLoai()!=null? dia.getTheLoai().getTenTL():""};
 			mod.addRow(item);
 		}
 	}
