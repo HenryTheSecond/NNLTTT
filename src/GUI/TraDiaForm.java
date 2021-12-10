@@ -230,12 +230,29 @@ public class TraDiaForm extends JFrame {
 	}
 	
 	public float tinhTienThanhToan(ChiTietThueDia ct) {
-		float tong= ct.getGia() * ct.getSoNgayThue();
+		/*float tong= ct.getGia() * ct.getSoNgayThue();
 		SimpleDateFormat obj = new SimpleDateFormat("yyyy-MM-dd"); 
 		long diff = new Date().getTime() - ct.getHoaDon().getNgayThue().getTime();
 		long soNgayTre = TimeUnit.MILLISECONDS.toDays(diff) - ct.getSoNgayThue();
-		TienPhatDAO tienPhat = new TienPhatDAO();
-		tong += tienPhat.get()*soNgayTre;
+		if(soNgayTre>0) {
+			TienPhatDAO tienPhat = new TienPhatDAO();
+			tong += tienPhat.get()*soNgayTre;
+		}
+		return tong;*/
+		
+		float tong=0;
+		long now = new Date().getTime();
+		long ngayThue = ct.getHoaDon().getNgayThue().getTime();
+		long soNgayThue = ct.getSoNgayThue() * 24 * 60 * 60 * 1000;
+		if(now - ngayThue <= soNgayThue) {
+			long diff = (long)Math.ceil( (now-ngayThue)*1.0/(24* 60 * 60 * 1000) );
+			tong = ct.getGia() * diff;
+		}
+		else {
+			tong = ct.getSoNgayThue() * ct.getGia();
+			long soNgayTre = (long)Math.ceil( (now - ngayThue - soNgayThue)*1.0/(24*60*60*1000) );
+			tong += new TienPhatDAO().get()*soNgayTre;
+		}
 		return tong;
 	}
 }

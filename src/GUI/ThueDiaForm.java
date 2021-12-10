@@ -332,6 +332,10 @@ public class ThueDiaForm extends JFrame {
 			dia.setDangThue( dia.getDangThue()+1 );
 			bangDiaDAO.update(dia);
 		}
+		JOptionPane.showMessageDialog(contentPane, "Thuê thành công", "Thuê đĩa", 
+                JOptionPane.INFORMATION_MESSAGE);
+		DefaultTableModel mod = (DefaultTableModel)tableChiTietThue.getModel();
+		mod.setRowCount(0);
 		
 	}
 	
@@ -347,7 +351,7 @@ public class ThueDiaForm extends JFrame {
 				Integer.parseInt(tableChiTietThue.getValueAt(i, 2).toString());
 				Float.parseFloat(tableChiTietThue.getValueAt(i, 3).toString());
 				BangDia dia = new BangDiaDAO().get(maDia);
-				if( dia.getSoLuongThue() - dia.getDangThue() == 0 )
+				if( dia.getSoLuongThue() - dia.getDangThue() <= 0 )
 					return false;
 			}catch(Exception e) {
 				return false;
