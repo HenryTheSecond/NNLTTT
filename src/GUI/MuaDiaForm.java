@@ -232,8 +232,13 @@ public class MuaDiaForm extends JFrame {
 	}
 	
 	public void XacNhan() {
-		if(kiemTraDuLieu() == false) {
-			JOptionPane.showMessageDialog(new JFrame(), "Nhập số lượng");  
+		int kt = kiemTraDuLieu();
+		if(kt == -1) {
+			JOptionPane.showMessageDialog(new JFrame(), "Số lượng nhập không hợp lệ");  
+			return;
+		}
+		else if(kt==0) {
+			JOptionPane.showMessageDialog(new JFrame(), "Số lượng không đủ");  
 			return;
 		}
 		HoaDonBanHangDAO hoaDonBanHangDAO = new HoaDonBanHangDAO();
@@ -256,16 +261,21 @@ public class MuaDiaForm extends JFrame {
 		JOptionPane.showMessageDialog(null, "Thêm thành công");
 	}
 	
-	public boolean kiemTraDuLieu() {
+	public int kiemTraDuLieu() {
+		BangDiaDAO bangDiaDAO = new BangDiaDAO();
+		BangDia dia;
 		for(int i=0; i<table_chitietmua.getRowCount(); i++) {
 			try {
 				if(table_chitietmua.getValueAt(i, 2).toString()=="")
-					return false;
+					return -1;
 			}catch(Exception e) {
-				return false;
+				return -1;
 			}
+			dia = bangDiaDAO.get( Integer.parseInt(table_chitietmua.getValueAt(i, 0).toString()) );
+			if(dia.getSoLuong() < Integer.parseInt( table_chitietmua.getValueAt(i, 2).toString() ) )
+				return 0;
 		}
-		return true;
+		return 1;
 		
 	}
 }

@@ -310,8 +310,13 @@ public class ThueDiaForm extends JFrame {
 	}
 	
 	public void btnThemClicked() {
-		if(kiemTraDuLieu() == false) {
-			JOptionPane.showMessageDialog(new JFrame(), "Hello, Welcome to Javatpoint.");  
+		int kt = kiemTraDuLieu();
+		if(kt == -1) {
+			JOptionPane.showMessageDialog(new JFrame(), "Dữ liệu không phù hợp");  
+			return;
+		}
+		else if(kt==0) {
+			JOptionPane.showMessageDialog(new JFrame(), "Số lượng không đủ");  
 			return;
 		}
 		HoaDonThueDAO hoaDonThueDAO = new HoaDonThueDAO();
@@ -339,11 +344,11 @@ public class ThueDiaForm extends JFrame {
 		
 	}
 	
-	public boolean kiemTraDuLieu() {
+	public int kiemTraDuLieu() {
 		try {
 			Integer.parseInt(txtMaKH.getText());
 		}catch(Exception e) {
-			return false;
+			return -1;
 		}
 		for(int i=0; i<tableChiTietThue.getRowCount(); i++) {
 			try {
@@ -352,12 +357,12 @@ public class ThueDiaForm extends JFrame {
 				Float.parseFloat(tableChiTietThue.getValueAt(i, 3).toString());
 				BangDia dia = new BangDiaDAO().get(maDia);
 				if( dia.getSoLuongThue() - dia.getDangThue() <= 0 )
-					return false;
+					return 0;
 			}catch(Exception e) {
-				return false;
+				return -1;
 			}
 		}
-		return true;
+		return 1;
 		
 	}
 }
